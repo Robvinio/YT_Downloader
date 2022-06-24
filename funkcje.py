@@ -4,6 +4,8 @@ funkcje.py:
 
 from pytube import YouTube
 import os
+from urllib import request
+
 
 class NotYTVideoError(Exception):
     """Source is not YT video """
@@ -19,6 +21,10 @@ def pob(source, path):
         base, ext =os.path.splitext(out_file)
         file=base + '.mp3'
         os.rename(out_file, file)
+        # url=mf.thumbnail_url
+        # im = request.urlretrieve(url, 'pic.jpg')
+        # cover=im[0]
+
 
 def starting_path():
     if os.path.isfile('path.txt'):
