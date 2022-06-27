@@ -5,6 +5,9 @@ funkcje.py:
 from pytube import YouTube
 import os
 from urllib import request
+from mutagen.id3 import ID3, APIC
+from PIL import Image
+from moviepy.audio.io.AudioFileClip import AudioFileClip
 
 
 class NotYTVideoError(Exception):
@@ -16,15 +19,30 @@ def pob(source, path):
         raise NotYTVideoError
     else:
         mf = YouTube(source)
-        audio=mf.streams.filter(only_audio=True).first()
-        out_file=audio.download(output_path=path)
-        base, ext =os.path.splitext(out_file)
-        file=base + '.mp3'
-        os.rename(out_file, file)
-        # url=mf.thumbnail_url
-        # im = request.urlretrieve(url, 'pic.jpg')
-        # cover=im[0]
-
+        # audio=mf.streams.filter(only_audio=True).first()
+        # out_file=audio.download(output_path=path)
+        audio=mf.streams.get_audio_only().download(path)
+        file=audio[:-4]+'.mp3'
+        fmp3=AudioFileClip(audio)
+        fmp3.write_audiofile(file)
+        fmp3.close()
+        os.remove(audio)
+        # fmp4=AudioFileClip(out_file)
+        # base, ext =os.path.splitext(out_file)
+        # file=base + '.mp3'
+        # fmp3=fmp4
+        # fmp4.close()
+        # os.remove(out_file)
+        # fmp3.write_audiofile(file)
+        # fmp3.close()
+        url = mf.thumbnail_url
+        im = request.urlretrieve(url, 'pic.jpg')
+        cover=Image.open(im[0])
+        cover.save(im[0])
+        fa = ID3(file)
+        fa.add(APIC(encoding=3, mime='image/jpeg', type=3, desc=u'Cover', data=open(im[0], 'rb').read()))
+        fa.save(v2_version=3)
+        os.remove(im[0])
 
 def starting_path():
     if os.path.isfile('path.txt'):

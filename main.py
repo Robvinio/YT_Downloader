@@ -4,6 +4,7 @@ from tkinter.messagebox import showerror, showinfo
 from tkinter import filedialog
 import os
 import funkcje
+from pytube import Playlist
 
 def download():
     s=source.get()
