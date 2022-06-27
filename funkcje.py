@@ -19,22 +19,12 @@ def pob(source, path):
         raise NotYTVideoError
     else:
         mf = YouTube(source)
-        # audio=mf.streams.filter(only_audio=True).first()
-        # out_file=audio.download(output_path=path)
         audio=mf.streams.get_audio_only().download(path)
         file=audio[:-4]+'.mp3'
         fmp3=AudioFileClip(audio)
         fmp3.write_audiofile(file)
         fmp3.close()
         os.remove(audio)
-        # fmp4=AudioFileClip(out_file)
-        # base, ext =os.path.splitext(out_file)
-        # file=base + '.mp3'
-        # fmp3=fmp4
-        # fmp4.close()
-        # os.remove(out_file)
-        # fmp3.write_audiofile(file)
-        # fmp3.close()
         url = mf.thumbnail_url
         im = request.urlretrieve(url, 'pic.jpg')
         cover=Image.open(im[0])

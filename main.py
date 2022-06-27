@@ -10,15 +10,25 @@ def download():
     s=source.get()
     p=path.cget('text')
     if os.path.exists(p):
-        try:
-            funkcje.pob(s,p)
-        except funkcje.NotYTVideoError:
-            showerror('Błąd', 'Niepoprawny link')
+        if(s.startswith('https://www.youtube.com/playlist')==True):
+            playlist=Playlist(s)
+            p_title=playlist.title
+            print(p_title)
+            p=os.path.join(p, p_title)
+            os.mkdir(p)
+            for utwor in playlist.video_urls:
+                funkcje.pob(utwor, p)
+            showinfo('Pobrane', 'Playlista została pobrana')
         else:
-            file_path = open('path.txt', 'w')
-            file_path.write(p)
-            file_path.close()
-            showinfo('Pobrany','Plik został pobrany')
+            try:
+                funkcje.pob(s,p)
+            except funkcje.NotYTVideoError:
+                showerror('Błąd', 'Niepoprawny link')
+            else:
+                file_path = open('path.txt', 'w')
+                file_path.write(p)
+                file_path.close()
+                showinfo('Pobrany','Plik został pobrany')
     else:
         showerror('Błąd', 'Nie ma takiej ścieżki')
 
@@ -29,7 +39,7 @@ def chose_path():
 okno=Tk()
 okno.title('YT Dowloader')
 okno.geometry('500x300')
-Label(okno, text='Link do pobrania').grid(row=1, column=1)
+Label(okno, text='Link do pobrania (ctr+V by wkleić)').grid(row=1, column=1)
 Label(okno, text='Ścieżka zapisu').grid(row=1, column=2)
 source=Entry(okno)
 source.grid(row=2, column=1)
