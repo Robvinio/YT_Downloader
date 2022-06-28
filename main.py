@@ -25,9 +25,6 @@ def download():
             except funkcje.NotYTVideoError:
                 showerror('Błąd', 'Niepoprawny link')
             else:
-                file_path = open('path.txt', 'w')
-                file_path.write(p)
-                file_path.close()
                 showinfo('Pobrany','Plik został pobrany')
     else:
         showerror('Błąd', 'Nie ma takiej ścieżki')
@@ -35,6 +32,9 @@ def download():
 def chose_path():
     p=filedialog.askdirectory()
     path.config(text=str(p))
+    file_path = open('path.txt', 'w')
+    file_path.write(p)
+    file_path.close()
 
 okno=Tk()
 okno.title('YT Dowloader')
