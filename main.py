@@ -5,6 +5,7 @@ from tkinter import filedialog
 import os
 import funkcje
 from pytube import Playlist
+import pyperclip as cb
 
 def download():
     s=source.get()
@@ -36,6 +37,10 @@ def chose_path():
     file_path.write(p)
     file_path.close()
 
+def paste_source():
+    source.delete(0, END)
+    source.insert(0, cb.paste())
+
 okno=Tk()
 okno.title('YT Dowloader')
 okno.geometry('500x300')
@@ -46,5 +51,6 @@ source.grid(row=2, column=1)
 path=Label(okno, text=funkcje.starting_path())
 ws=Button(okno,text='Zmień ścieżkę', command=chose_path).grid(row=3, column=2)
 path.grid(row=2, column=2)
-d=Button(okno, text='Pobierz', command=download).grid(row=3, column=1)
+p=Button(okno, text='Wklej', command=paste_source).grid(row=3, column=1)
+d=Button(okno, text='Pobierz', command=download).grid(row=4, column=1)
 okno.mainloop()
